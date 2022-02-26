@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "900755043037",
+    "project_id": "chatrio",
+    "storage_bucket": "chatrio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900755043037:android:6a501a4ff0b90c4f37e134",
+        "android_client_info": {
+          "package_name": "com.godspeed.chatrio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900755043037-pi0dd5tkno9nf83fucbt7m8lkjv751hl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.godspeed.chatrio",
+            "certificate_hash": "76b170dd274f35aa15c985d263c2bed3330a15a3"
+          }
+        },
+        {
+          "client_id": "900755043037-j3t4rr1no4gemvelm59iloc0vq5u6g0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTEk-KAwRJ5GS-0UIfR0NY-0-rXDOK2ng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900755043037-j3t4rr1no4gemvelm59iloc0vq5u6g0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Chatrio</string>
+    <string name="enter_your_phone_no">Enter Phone Number</string>
+    <string name="get_otp">Get OTP</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="verify">Verify OTP</string>
+    <string name="pro">Verifying OTP</string>
 </resources>
