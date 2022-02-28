@@ -9,7 +9,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.godspeed.un_toxic"
+        applicationId "com.godspeed.chatrio"
         minSdk 23
         targetSdk 32
         versionCode 1
