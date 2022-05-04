@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.godspeed.chatrio.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -33,19 +34,23 @@ class MainActivity : AppCompatActivity() {
         if(auth.currentUser != null){
             binding.layoutLoadingProfile.visibility = View.VISIBLE
             binding.authCardView.visibility = View.GONE
-            db.collection("Profiles").document(auth.currentUser!!.uid).get()
-                .addOnCompleteListener{task2->
-                    if(task2.result?.exists() == true){
-                        val intent = Intent(this, Homepage::class.java)
-                        startActivity(intent)
-                        finish()
-                        Toast.makeText(this, "Welcome Back Champion !! ", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val intent = Intent(this, Profile::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-                }
+//            db.collection("Profiles").document(auth.currentUser!!.uid).get()
+//                .addOnCompleteListener{task2->
+//                    if(task2.result?.exists() == true){
+//                        val intent = Intent(this, Homepage::class.java)
+//                        startActivity(intent)
+//                        finish()
+//                        Snackbar.make(binding.root, "Welcome !!", Snackbar.LENGTH_SHORT).show();
+//                    } else {
+//                        val intent = Intent(this, Profile::class.java)
+//                        startActivity(intent)
+//                        finish()
+//                    }
+//                }
+            val intent = Intent(this, Homepage::class.java)
+            startActivity(intent)
+            finish()
+            Toast.makeText(this, "Welcome !!", Toast.LENGTH_SHORT).show()
         } else {
             binding.layoutLoadingProfile.visibility = View.GONE
             binding.authCardView.visibility = View.VISIBLE
@@ -58,15 +63,25 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.get.setOnClickListener{sendOtp()}
-        binding.verify.setOnClickListener{verifyOtp()}
+        binding.verify.isEnabled = false;
+        binding.verify.isClickable = false;
+        binding.getotp.setOnClickListener{
+            if(sendOtp())
+            {
+                binding.verify.isEnabled = true;
+                binding.verify.isClickable = true;
+                binding.authProgress.visibility = View.GONE
+            }
+        }
+        binding.verify.setOnClickListener{
+            verifyOtp()
+        }
     }
 
-    private fun sendOtp(){
+    private fun sendOtp(): Boolean {
         if (binding.phone.text.isEmpty() || binding.phone.text.length < 10){
-            Toast.makeText(this, "Please enter valid phone number!", Toast.LENGTH_SHORT).show()
-            return
+            Toast.makeText(this, "Please enter valid phone number !!", Toast.LENGTH_SHORT).show()
+            return false;
         }
         binding.authProgress.visibility = View.VISIBLE
         val phoneNumber = "+91 " + binding.phone.text.toString()
@@ -78,11 +93,11 @@ class MainActivity : AppCompatActivity() {
             .setCallbacks(callbacks)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
-
+        return true;
     }
     private fun verifyOtp(){
         if (binding.otp.text.isEmpty() || binding.otp.text.length < 6){
-            Toast.makeText(this, "Please enter valid 6 digit OTP!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please enter valid 6 digit OTP !!", Toast.LENGTH_SHORT).show()
             return
         }
         val otpNumber = binding.otp.text.toString()
@@ -95,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted: $credential")
             binding.authProgress.visibility = View.GONE
-            binding.layoutPhone.visibility = View.GONE
             Firebase.messaging.subscribeToTopic("all").addOnSuccessListener {
                 Log.e("","Added to notification list");
             }
@@ -123,13 +137,10 @@ class MainActivity : AppCompatActivity() {
             // now need to ask the user to enter the code and then construct a credential
             // by combining the code with a verification ID.
             Log.d(TAG, "onCodeSent:$verificationId")
-            Toast.makeText(this@MainActivity, "OTP Sent Successfully!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "OTP Sent Successfully :)", Toast.LENGTH_SHORT).show()
             // Save verification ID and resending token so we can use them later
             storedVerificationId = verificationId
 //            resendToken = token
-            binding.authProgress.visibility = View.GONE
-            binding.layoutPhone.visibility = View.GONE
-            binding.layoutOtp.visibility = View.VISIBLE
         }
     }
 
@@ -138,27 +149,31 @@ class MainActivity : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    db.collection("Profiles").document(auth.currentUser!!.uid).get()
-                        .addOnCompleteListener{task2->
-                            if(task2.result?.exists() == true){
-                                val intent = Intent(this, Homepage::class.java)
-                                startActivity(intent)
-                                finish()
-                                Toast.makeText(this, "Welcome Champion !! ", Toast.LENGTH_SHORT).show()
-                            } else {
-                                val intent = Intent(this, Profile::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                        }
+//                    db.collection("Profiles").document(auth.currentUser!!.uid).get()
+//                        .addOnCompleteListener{task2->
+//                            if(task2.result?.exists() == true){
+//                                val intent = Intent(this, Homepage::class.java)
+//                                startActivity(intent)
+//                                finish()
+//                                Toast.makeText(this, "Welcome Champion !! ", Toast.LENGTH_SHORT).show()
+//                            } else {
+//                                val intent = Intent(this, Profile::class.java)
+//                                startActivity(intent)
+//                                finish()
+//                            }
+//                        }
+                        Toast.makeText(this, "Welcome Champion !! ", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, Homepage::class.java)
+                        startActivity(intent)
+                        finish()
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
-                        Toast.makeText(this, "Invalid code, Try Again!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Invalid Code Try Again !!", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Something went wrong !!", Toast.LENGTH_SHORT).show()
                     }
                 }
                 binding.authProgress.visibility = View.GONE
@@ -169,7 +184,5 @@ class MainActivity : AppCompatActivity() {
         binding.phone.text.clear()
         binding.otp.text.clear()
         auth.signOut()
-        binding.layoutOtp.visibility = View.GONE
-        binding.layoutPhone.visibility = View.VISIBLE
     }
 }
