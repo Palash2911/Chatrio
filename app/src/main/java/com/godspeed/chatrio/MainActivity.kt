@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 //                        finish()
 //                    }
 //                }
-            val intent = Intent(this, Homepage::class.java)
+            val intent = Intent(this, Profile::class.java)
             startActivity(intent)
             finish()
             Toast.makeText(this, "Welcome !!", Toast.LENGTH_SHORT).show()
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
 //                            }
 //                        }
                         Toast.makeText(this, "Welcome Champion !! ", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, Homepage::class.java)
+                        val intent = Intent(this, Profile::class.java)
                         startActivity(intent)
                         finish()
                 } else {
