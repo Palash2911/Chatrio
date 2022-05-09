@@ -78,7 +78,7 @@ class Profile : AppCompatActivity() {
                             val name: String = binding.Name.text.toString()
                             val user = User(uid, name, phone, imgurl);
                             db!!.reference
-                                .child("chatters")
+                                .child("Chatters")
                                 .child(uid!!)
                                 .setValue(user)
                                 .addOnCompleteListener {
@@ -90,6 +90,7 @@ class Profile : AppCompatActivity() {
                     }
                     else
                     {
+                        Log.d("Error", task.toString());
                         Toast.makeText(this, "Something Went Wrong !!", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -105,23 +106,28 @@ class Profile : AppCompatActivity() {
             if(data.data != null)
             {
                 val uri = data.data
-                val storage2 = FirebaseStorage.getInstance()
+                val storage = FirebaseStorage.getInstance()
                 val time = Date().time
-                val refi = storage2.reference
+                val reference = storage.reference
                     .child("Profile")
                     .child(time.toString() + "")
-                refi.putFile(uri!!).addOnCompleteListener{ uri->
-                    val fp = uri.toString()
-                    val obj = HashMap<String, Any>()
-                    obj["image"] = fp
-                    db!!.reference
-                        .child("chatters")
-                        .child(FirebaseAuth.getInstance().uid!!)
-                        .updateChildren(obj).addOnSuccessListener { }
+                reference.putFile(uri!!).addOnCompleteListener{ task->
+                    if(task.isSuccessful)
+                    {
+                        reference.downloadUrl.addOnCompleteListener { uri->
+                            val fp = uri.toString()
+                            val obj = HashMap<String, Any>()
+                            obj["image"] = fp
+                            db!!.reference
+                                .child("Chatters")
+                                .child(FirebaseAuth.getInstance().uid!!)
+                                .updateChildren(obj).addOnSuccessListener { }
+                        }
+                    }
                 }
+            binding.profileimg.setImageURI(data?.data);
+            setupimg = data?.data
             }
         }
-        binding.profileimg.setImageURI(data?.data);
-        setupimg = data?.data
     }
 }
