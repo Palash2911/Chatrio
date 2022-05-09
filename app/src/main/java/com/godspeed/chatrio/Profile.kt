@@ -109,8 +109,6 @@ class Profile : AppCompatActivity() {
                 val storage = FirebaseStorage.getInstance()
                 val time = Date().time
                 val reference = storage.reference
-                    .child("Profile")
-                    .child(time.toString() + "")
                 reference.putFile(uri!!).addOnCompleteListener{ task->
                     if(task.isSuccessful)
                     {

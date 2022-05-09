@@ -13,6 +13,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.R
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -25,31 +26,32 @@ class MainActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private var storedVerificationId: String = ""
     private lateinit var binding: ActivityMainBinding
-    private val db = Firebase.firestore
+    private var db: FirebaseDatabase? = null
     private lateinit var  messaging:FirebaseMessaging
 
     override fun onStart() {
         super.onStart()
-        messaging = FirebaseMessaging.getInstance();
+        db = FirebaseDatabase.getInstance()
         if(auth.currentUser != null){
             binding.layoutLoadingProfile.visibility = View.VISIBLE
             binding.authCardView.visibility = View.GONE
-//            db.collection("Profiles").document(auth.currentUser!!.uid).get()
-//                .addOnCompleteListener{task2->
-//                    if(task2.result?.exists() == true){
-//                        val intent = Intent(this, Homepage::class.java)
-//                        startActivity(intent)
-//                        finish()
-//                        Snackbar.make(binding.root, "Welcome !!", Snackbar.LENGTH_SHORT).show();
-//                    } else {
-//                        val intent = Intent(this, Profile::class.java)
-//                        startActivity(intent)
-//                        finish()
-//                    }
-//                }
-            val intent = Intent(this, Profile::class.java)
-            startActivity(intent)
-            finish()
+             db!!.reference
+                 .child("Chatters")
+                 .child(auth.currentUser!!.uid).get()
+                 .addOnCompleteListener { task1 ->
+                     if(task1.result?.exists() == true)
+                     {
+                         val intent = Intent(this, Homepage::class.java)
+                        startActivity(intent)
+                        finish()
+                     }
+                     else
+                     {
+                         val intent = Intent(this, Profile::class.java)
+                         startActivity(intent)
+                         finish()
+                     }
+                 }
             Toast.makeText(this, "Welcome !!", Toast.LENGTH_SHORT).show()
         } else {
             binding.layoutLoadingProfile.visibility = View.GONE
@@ -68,8 +70,8 @@ class MainActivity : AppCompatActivity() {
         binding.getotp.setOnClickListener{
             if(sendOtp())
             {
-                binding.verify.isEnabled = true;
-                binding.verify.isClickable = true;
+//                binding.verify.isEnabled = true;
+//                binding.verify.isClickable = true;
                 binding.authProgress.visibility = View.GONE
             }
         }
@@ -149,23 +151,24 @@ class MainActivity : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-//                    db.collection("Profiles").document(auth.currentUser!!.uid).get()
-//                        .addOnCompleteListener{task2->
-//                            if(task2.result?.exists() == true){
-//                                val intent = Intent(this, Homepage::class.java)
-//                                startActivity(intent)
-//                                finish()
-//                                Toast.makeText(this, "Welcome Champion !! ", Toast.LENGTH_SHORT).show()
-//                            } else {
-//                                val intent = Intent(this, Profile::class.java)
-//                                startActivity(intent)
-//                                finish()
-//                            }
-//                        }
+                    db!!.reference
+                        .child("Chatters")
+                        .child(auth.currentUser!!.uid).get()
+                        .addOnCompleteListener { task1 ->
+                            if(task1.result?.exists() == true)
+                            {
+                                val intent = Intent(this, Homepage::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            else
+                            {
+                                val intent = Intent(this, Profile::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
                         Toast.makeText(this, "Welcome Champion !! ", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, Profile::class.java)
-                        startActivity(intent)
-                        finish()
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
