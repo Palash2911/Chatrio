@@ -2,6 +2,7 @@ package com.godspeed.chatrio
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.godspeed.chatrio.adapter.Useradapter
 import com.godspeed.chatrio.databinding.ActivityHomepageBinding
 import com.godspeed.chatrio.model.User
@@ -25,6 +26,7 @@ class Homepage : AppCompatActivity() {
         db = FirebaseDatabase.getInstance()
         users = ArrayList<User>()
         useradapter = Useradapter(this, users!!)
+        binding!!.chatrec.layoutManager = LinearLayoutManager(this)
         db!!.reference.child("Chatters")
             .child(FirebaseAuth.getInstance().uid!!)
             .addValueEventListener(object : ValueEventListener{

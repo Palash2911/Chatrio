@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp">
 
     <LinearLayout
+        android:id="@+id/ll_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="15dp"
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/Card"
+            android:id="@+id/cards"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="15dp"
@@ -24,12 +28,13 @@
                 android:id="@+id/cardimg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_baseline_avatar"
-                android:contentDescription="TODO" />
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_baseline_avatar" />
 
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
+            android:id="@+id/ll_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -40,7 +45,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:gravity="center|center_vertical"
+                android:inputType="textPersonName"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/lastchat"
@@ -48,9 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName" />
-
+                android:inputType="textPersonName"
+                tools:ignore="SpeakableTextPresentCheck" />
         </LinearLayout>
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>
