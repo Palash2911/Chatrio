@@ -4,5 +4,5 @@
     <string name="get_otp">GET OTP</string>
     <string name="enter_otp">Enter OTP</string>
     <string name="verify">Verify OTP</string>
-    <string name="pro">Verifying OTP</string>
+    <string name="pro">Verifying Proflie</string>
 </resources>

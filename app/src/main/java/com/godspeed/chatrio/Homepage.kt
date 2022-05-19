@@ -15,6 +15,7 @@ var binding: ActivityHomepageBinding?=null
 var db: FirebaseDatabase?=null
 var users: ArrayList<User>?=null
 var useradapter: Useradapter?=null
+var user: User?=null
 
 class Homepage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,15 +29,43 @@ class Homepage : AppCompatActivity() {
             .child(FirebaseAuth.getInstance().uid!!)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-
+                    user = snapshot.getValue(User::class.java)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
                 }
-
             })
 
-        setContentView(R.layout.activity_homepage)
+        binding!!.chatrec.adapter = useradapter
+        db!!.reference.child("Chatters").addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                users!!.clear();
+                for(ss in snapshot.children){
+                    val user:User?=ss.getValue(User::class.java)
+                    if(!user!!.uid.equals(FirebaseAuth.getInstance().uid))
+                    {
+                        users!!.add(user)
+                    }
+                }
+                useradapter!!.notifyDataSetChanged()
+            }
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val currenId = FirebaseAuth.getInstance().uid
+        db!!.reference.child("presence")
+            .child(currenId!!).setValue("Online")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val currenId = FirebaseAuth.getInstance().uid
+        db!!.reference.child("presence")
+            .child(currenId!!).setValue("Offline")
     }
 }
