@@ -40,10 +40,7 @@ class Profile : AppCompatActivity() {
         binding.number.text = auth.currentUser!!.phoneNumber.toString()
         var cntbtn = binding.cntbtn
         storage = FirebaseStorage.getInstance()
-        db = FirebaseDatabase.getInstance()
-
-
-        val profile:HashMap<String, String> = HashMap()
+        db = FirebaseDatabase.getInstance() 
 
         binding.profileimg.setOnClickListener{
             val intent = Intent()

@@ -39,6 +39,7 @@ class Useradapter(var cnt: Context, var userlist: ArrayList<User>):RecyclerView.
         holder.binding.lastchat.text = chatter.number
         Glide.with(cnt).load(chatter.image)
             .placeholder(R.drawable.ic_baseline_avatar)
+            .dontAnimate()
             .into(holder.binding.cardimg)
     }
 
